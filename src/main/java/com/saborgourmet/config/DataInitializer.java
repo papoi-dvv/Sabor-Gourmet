@@ -12,6 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import com.saborgourmet.model.enums.Rol;
 
 @Component
 public class DataInitializer {
@@ -70,6 +73,27 @@ public class DataInitializer {
                         usuarioRepository.save(u);
                         logger.info(" - contraseña reescrita (por excepción) para usuario: {}", u.getNombreUsuario());
                     }
+                }
+                // Asegurar que los usuarios demo (admin, mozo, cocinero, cajero) existen
+                Map<String, Rol> demo = new HashMap<>();
+                demo.put("admin", Rol.ADMIN);
+                demo.put("mozo", Rol.MOZO);
+                demo.put("cocinero", Rol.COCINERO);
+                demo.put("cajero", Rol.CAJERO);
+
+                for (Map.Entry<String, Rol> entry : demo.entrySet()) {
+                    String username = entry.getKey();
+                    Rol role = entry.getValue();
+                    usuarioRepository.findByNombreUsuario(username).orElseGet(() -> {
+                        Usuario nu = new Usuario();
+                        nu.setNombreUsuario(username);
+                        nu.setContrasena(passwordEncoder.encode("password"));
+                        nu.setRol(role);
+                        nu.setEstado("ACTIVO");
+                        usuarioRepository.save(nu);
+                        logger.info(" - usuario demo creado: {} (rol={})", username, role);
+                        return nu;
+                    });
                 }
             } else {
                 usuarioRepository.findByNombreUsuario("admin").ifPresent(admin -> {
