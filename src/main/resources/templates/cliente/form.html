@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h1 th:if="${cliente.idCliente == null}">
+                    <i class="bi bi-person-plus"></i> Nuevo Cliente
+                </h1>
+                <h1 th:if="${cliente.idCliente != null}">
+                    <i class="bi bi-person-check"></i> Editar Cliente
+                </h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <form th:action="${cliente.idCliente == null ? '/clientes' : '/clientes/' + cliente.idCliente}" 
+                              th:object="${cliente}" method="POST" class="needs-validation">
+                            
+                            <div class="mb-3">
+                                <label for="dni" class="form-label">DNI *</label>
+                                <input type="text" class="form-control" id="dni" th:field="*{dni}" 
+                                       maxlength="8" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nombres" class="form-label">Nombres *</label>
+                                    <input type="text" class="form-control" id="nombres" th:field="*{nombres}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="apellidos" class="form-label">Apellidos *</label>
+                                    <input type="text" class="form-control" id="apellidos" th:field="*{apellidos}" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="telefono" th:field="*{telefono}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="correo" class="form-label">Correo</label>
+                                    <input type="email" class="form-control" id="correo" th:field="*{correo}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select class="form-select" id="estado" th:field="*{estado}">
+                                    <option value="ACTIVO">Activo</option>
+                                    <option value="INACTIVO">Inactivo</option>
+                                </select>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-end mt-4">
+                                <a href="/clientes" class="btn btn-secondary">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save"></i> Guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

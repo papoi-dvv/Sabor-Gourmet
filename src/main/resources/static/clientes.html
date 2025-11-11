@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor Gourmet - Clientes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><i class="bi bi-shop"></i> Sabor Gourmet</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/clientes.html">Clientes</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="userName">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="display-5"><i class="bi bi-people"></i> Gestión de Clientes</h1>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <button class="btn btn-primary" onclick="openNewClienteForm()">
+                    <i class="bi bi-plus-circle"></i> Nuevo Cliente
+                </button>
+                <button class="btn btn-secondary" onclick="loadClientes()">
+                    <i class="bi bi-arrow-clockwise"></i> Actualizar
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="clientesContainer">
+                            <!-- Se llenará con JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="toastContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;"></div>
+
+    <div class="modal fade" id="clienteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clienteModalTitle">Nuevo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="clienteForm" onsubmit="saveCliente(event)">
+                    <div class="modal-body">
+                        <input type="hidden" id="clienteId">
+                        <div class="mb-3">
+                            <label for="dniCliente" class="form-label">DNI</label>
+                            <input type="text" class="form-control" id="dniCliente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombresCliente" class="form-label">Nombres</label>
+                            <input type="text" class="form-control" id="nombresCliente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apellidosCliente" class="form-label">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidosCliente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefonoCliente" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefonoCliente">
+                        </div>
+                        <div class="mb-3">
+                            <label for="correoCliente" class="form-label">Correo</label>
+                            <input type="email" class="form-control" id="correoCliente">
+                        </div>
+                        <div class="mb-3">
+                            <label for="estadoCliente" class="form-label">Estado</label>
+                            <select class="form-select" id="estadoCliente" required>
+                                <option value="ACTIVO">Activo</option>
+                                <option value="INACTIVO">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmModalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmBtn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5">
+        <p>&copy; 2025 Sabor Gourmet - Todos los derechos reservados</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script>
+        let clienteModal;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await AuthHelper.initialize();
+            if (!AuthHelper.isAuthenticated() || !AuthHelper.hasAnyRole(['ADMIN', 'MOZO'])) {
+                window.location.href = '/login.html';
+                return;
+            }
+            document.getElementById('userName').textContent = AuthHelper.currentUser?.username;
+            clienteModal = new bootstrap.Modal(document.getElementById('clienteModal'));
+            await loadClientes();
+        });
+
+        async function loadClientes() {
+            try {
+                UIUtils.showLoading(document.getElementById('clientesContainer'));
+                const clientes = await ApiService.getClientes();
+
+                const container = document.getElementById('clientesContainer');
+                container.innerHTML = '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>DNI</th><th>Nombres</th><th>Apellidos</th><th>Teléfono</th><th>Correo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="clientesBody"></tbody></table></div>';
+
+                const tbody = document.getElementById('clientesBody');
+                clientes.forEach(cliente => {
+                    const row = document.createElement('tr');
+                    const statusBadge = UIUtils.getStatusBadge(cliente.estado, 'cliente');
+                    row.innerHTML = `
+                        <td>${cliente.dni}</td>
+                        <td>${cliente.nombres}</td>
+                        <td>${cliente.apellidos}</td>
+                        <td>${cliente.telefono || '-'}</td>
+                        <td>${cliente.correo || '-'}</td>
+                        <td><span class="badge ${statusBadge}">${cliente.estado}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editCliente(${cliente.idCliente})">Editar</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCliente(${cliente.idCliente})">Eliminar</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        function openNewClienteForm() {
+            document.getElementById('clienteForm').reset();
+            document.getElementById('clienteId').value = '';
+            document.getElementById('clienteModalTitle').textContent = 'Nuevo Cliente';
+            clienteModal.show();
+        }
+
+        async function editCliente(id) {
+            try {
+                const cliente = await ApiService.getCliente(id);
+                document.getElementById('clienteId').value = cliente.idCliente;
+                document.getElementById('dniCliente').value = cliente.dni;
+                document.getElementById('nombresCliente').value = cliente.nombres;
+                document.getElementById('apellidosCliente').value = cliente.apellidos;
+                document.getElementById('telefonoCliente').value = cliente.telefono || '';
+                document.getElementById('correoCliente').value = cliente.correo || '';
+                document.getElementById('estadoCliente').value = cliente.estado;
+                document.getElementById('clienteModalTitle').textContent = 'Editar Cliente';
+                clienteModal.show();
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        async function saveCliente(event) {
+            event.preventDefault();
+            try {
+                const id = document.getElementById('clienteId').value;
+                const cliente = {
+                    dni: document.getElementById('dniCliente').value,
+                    nombres: document.getElementById('nombresCliente').value,
+                    apellidos: document.getElementById('apellidosCliente').value,
+                    telefono: document.getElementById('telefonoCliente').value,
+                    correo: document.getElementById('correoCliente').value,
+                    estado: document.getElementById('estadoCliente').value
+                };
+
+                if (id) {
+                    await ApiService.updateCliente(id, cliente);
+                    UIUtils.showToast('Cliente actualizado', 'success');
+                } else {
+                    await ApiService.createCliente(cliente);
+                    UIUtils.showToast('Cliente creado', 'success');
+                }
+
+                clienteModal.hide();
+                await loadClientes();
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        function deleteCliente(id) {
+            UIUtils.showConfirmModal('Eliminar Cliente', '¿Desea eliminar este cliente?', async () => {
+                try {
+                    await ApiService.deleteCliente(id);
+                    UIUtils.showToast('Cliente eliminado', 'success');
+                    await loadClientes();
+                } catch (error) {
+                    UIUtils.showError(error);
+                }
+            });
+        }
+
+        async function logout() {
+            await ApiService.logout();
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

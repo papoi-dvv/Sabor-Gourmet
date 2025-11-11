@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <i class="bi bi-shop"></i> Sabor Gourmet
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <!-- Admin Menu -->
+                <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-shield-lock"></i> Admin
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/admin/dashboard">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/admin/bitacora">Bitácora</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/clientes">Clientes</a></li>
+                        <li><a class="dropdown-item" href="/mesas">Mesas</a></li>
+                        <li><a class="dropdown-item" href="/platos">Platos</a></li>
+                    </ul>
+                </li>
+
+                <!-- Mesas -->
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','MOZO')">
+                    <a class="nav-link" href="/mesas/dashboard">
+                        <i class="bi bi-table"></i> Mesas
+                    </a>
+                </li>
+
+                <!-- Pedidos -->
+                <li class="nav-item dropdown" sec:authorize="hasAnyRole('ADMIN','MOZO','COCINERO','CAJERO')">
+                    <a class="nav-link dropdown-toggle" href="#" id="pedidosDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-receipt"></i> Pedidos
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/pedidos">Listar Pedidos</a></li>
+                        <li><a class="dropdown-item" href="/pedidos/nuevo">Nuevo Pedido</a></li>
+                        <li sec:authorize="hasRole('COCINERO')"><hr class="dropdown-divider"></li>
+                        <li sec:authorize="hasRole('COCINERO')"><a class="dropdown-item" href="/pedidos/cocina">Cocina</a></li>
+                    </ul>
+                </li>
+
+                <!-- Menú -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/platos/menu">
+                        <i class="bi bi-cup"></i> Menú
+                    </a>
+                </li>
+
+                <!-- Usuario -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i> <span sec:authentication="name">Usuario</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/logout">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</html>

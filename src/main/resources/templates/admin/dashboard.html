@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    
+    <main class="container my-5">
+        <h1 class="mb-5">
+            <i class="bi bi-shield-lock" style="color: var(--primary-color);"></i> Panel Administrativo
+        </h1>
+
+        <!-- Estadísticas -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-receipt" style="font-size: 2rem; color: var(--primary-color);"></i>
+                        <h5 class="mt-3">Total Pedidos</h5>
+                        <h2 th:text="${totalPedidos}">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-clock" style="font-size: 2rem; color: #ffc107;"></i>
+                        <h5 class="mt-3">Pendientes</h5>
+                        <h2 th:text="${pedidosPendientes}">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-people" style="font-size: 2rem; color: #28a745;"></i>
+                        <h5 class="mt-3">Usuarios</h5>
+                        <h2 th:text="${totalUsuarios}">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <h3 class="mb-3">Acciones Rápidas</h3>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <a href="/clientes/nuevo" class="btn btn-outline-primary w-100 py-3">
+                            <i class="bi bi-person-plus"></i><br>Nuevo Cliente
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/mesas/nuevo" class="btn btn-outline-primary w-100 py-3">
+                            <i class="bi bi-table"></i><br>Nueva Mesa
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/platos/nuevo" class="btn btn-outline-primary w-100 py-3">
+                            <i class="bi bi-cup-hot"></i><br>Nuevo Plato
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/pedidos/nuevo" class="btn btn-outline-primary w-100 py-3">
+                            <i class="bi bi-receipt"></i><br>Nuevo Pedido
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestión -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <h3 class="mb-3">Gestión</h3>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a href="/clientes" class="text-decoration-none">
+                            <i class="bi bi-people"></i> Gestionar Clientes
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/mesas" class="text-decoration-none">
+                            <i class="bi bi-table"></i> Gestionar Mesas
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/platos" class="text-decoration-none">
+                            <i class="bi bi-cup-hot"></i> Gestionar Platos
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/pedidos" class="text-decoration-none">
+                            <i class="bi bi-receipt"></i> Gestionar Pedidos
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6 mb-4">
+                <h3 class="mb-3">Reportes</h3>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a href="/admin/bitacora" class="text-decoration-none">
+                            <i class="bi bi-clipboard-list"></i> Ver Bitácora
+                        </a>
+                    </li>
+                    <li class="list-group-item disabled">
+                        <i class="bi bi-graph-up"></i> Reportes de Ventas (Próximo)
+                    </li>
+                    <li class="list-group-item disabled">
+                        <i class="bi bi-calendar"></i> Reportes por Período (Próximo)
+                    </li>
+                    <li class="list-group-item disabled">
+                        <i class="bi bi-pie-chart"></i> Estadísticas (Próximo)
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

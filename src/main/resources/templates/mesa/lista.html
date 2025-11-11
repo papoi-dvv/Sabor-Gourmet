@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1><i class="bi bi-table"></i> Gestión de Mesas</h1>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="/mesas/nuevo" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Nueva Mesa
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Número</th>
+                            <th>Capacidad</th>
+                            <th>Estado</th>
+                            <th>Última Actualización</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="mesa : ${mesas}">
+                            <td><strong>#<span th:text="${mesa.numero}">1</span></strong></td>
+                            <td th:text="${mesa.capacidad}">4</td>
+                            <td>
+                                <span th:if="${mesa.estado.name() == 'DISPONIBLE'}" class="badge bg-success">Disponible</span>
+                                <span th:if="${mesa.estado.name() == 'OCUPADA'}" class="badge bg-warning">Ocupada</span>
+                                <span th:if="${mesa.estado.name() == 'RESERVADA'}" class="badge bg-info">Reservada</span>
+                                <span th:if="${mesa.estado.name() == 'MANTENIMIENTO'}" class="badge bg-danger">Mantenimiento</span>
+                            </td>
+                            <td th:text="${#temporals.format(mesa.fechaActualizacion, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                            <td>
+                                <a th:href="@{/mesas/{id}/editar(id=${mesa.idMesa})}" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a th:href="@{/mesas/{id}/eliminar(id=${mesa.idMesa})}" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('¿Estás seguro?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(mesas)}">
+                            <td colspan="5" class="text-center text-muted p-4">
+                                <i class="bi bi-inbox"></i> No hay mesas registradas
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h1><i class="bi bi-receipt"></i> Nuevo Pedido</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <form th:action="@{/pedidos}" th:object="${pedido}" method="POST">
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="mesa" class="form-label">Mesa *</label>
+                                    <select class="form-select" id="mesa" th:field="*{mesa}" required>
+                                        <option value="">-- Seleccionar Mesa --</option>
+                                        <option th:each="mesa : ${mesas}" th:value="${mesa.idMesa}" 
+                                                th:text="${'Mesa #' + mesa.numero + ' (' + mesa.capacidad + ' pers.)'}">Mesa</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cliente" class="form-label">Cliente</label>
+                                    <select class="form-select" id="cliente" th:field="*{cliente}">
+                                        <option value="">-- Seleccionar Cliente --</option>
+                                        <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}" 
+                                                th:text="${cliente.nombreCompleto}">Cliente</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h5>Agregar Platos</h5>
+                            
+                            <div class="mb-3">
+                                <label for="platos" class="form-label">Platos Disponibles</label>
+                                <div th:if="${!#lists.isEmpty(platos)}">
+                                    <div th:each="plato : ${platos}" class="form-check">
+                                        <input class="form-check-input" type="checkbox" th:value="${plato.idPlato}" id="plato">
+                                        <label class="form-check-label" th:for="plato">
+                                            <span th:text="${plato.nombre}">Plato</span> - 
+                                            <strong th:text="${'S/. ' + #numbers.formatDecimal(plato.precio, 1, 2)}">0.00</strong>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div th:if="${#lists.isEmpty(platos)}" class="alert alert-warning">
+                                    No hay platos disponibles
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-end mt-4">
+                                <a href="/pedidos" class="btn btn-secondary">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save"></i> Crear Pedido
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

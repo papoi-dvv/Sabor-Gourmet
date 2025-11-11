@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1><i class="bi bi-table"></i> Dashboard de Mesas</h1>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="/mesas/nuevo" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Nueva Mesa
+                </a>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5>Total Mesas</h5>
+                        <h2 style="color: var(--primary-color);" th:text="${#lists.size(mesas)}">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5>Disponibles</h5>
+                        <h2 style="color: #28a745;" th:text="${mesasDisponibles}">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5>Ocupadas</h5>
+                        <h2 style="color: #ffc107;" th:text="${#lists.size(mesas) - mesasDisponibles}">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5>Tasa Ocupación</h5>
+                        <h2 style="color: #dc3545;" th:text="${#lists.size(mesas) > 0 ? ((#lists.size(mesas) - mesasDisponibles) * 100 / #lists.size(mesas)) + '%' : '0%'}">0%</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mesas en Grid -->
+        <div class="row g-3">
+            <div th:each="mesa : ${mesas}" class="col-md-4 col-lg-3">
+                <div class="card h-100" th:classappend="${mesa.estado.name() == 'DISPONIBLE' ? 'border-success' : 'border-warning'}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">
+                            <i class="bi bi-table"></i> Mesa #<span th:text="${mesa.numero}">1</span>
+                        </h5>
+                        <p class="card-text text-muted">
+                            Capacidad: <span th:text="${mesa.capacidad}">4</span> personas
+                        </p>
+                        <p>
+                            <span th:if="${mesa.estado.name() == 'DISPONIBLE'}" class="badge bg-success">Disponible</span>
+                            <span th:if="${mesa.estado.name() == 'OCUPADA'}" class="badge bg-warning">Ocupada</span>
+                            <span th:if="${mesa.estado.name() == 'RESERVADA'}" class="badge bg-info">Reservada</span>
+                            <span th:if="${mesa.estado.name() == 'MANTENIMIENTO'}" class="badge bg-danger">Mantenimiento</span>
+                        </p>
+                        <div class="btn-group mt-3" role="group">
+                            <a th:if="${mesa.estaDisponible()}" th:href="@{/mesas/{id}/ocupar(id=${mesa.idMesa})}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-check-circle"></i> Ocupar
+                            </a>
+                            <a th:if="${!mesa.estaDisponible()}" th:href="@{/mesas/{id}/liberar(id=${mesa.idMesa})}" class="btn btn-sm btn-info">
+                                <i class="bi bi-x-circle"></i> Liberar
+                            </a>
+                            <a th:href="@{/mesas/{id}/editar(id=${mesa.idMesa})}" class="btn btn-sm btn-secondary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    
+    <main class="container my-5">
+        <h1 class="mb-5 text-center">
+            <i class="bi bi-cup-hot" style="color: var(--primary-color);"></i> Menú del Restaurante
+        </h1>
+
+        <!-- Entradas -->
+        <h2 class="mt-5 mb-4" th:if="${!#lists.isEmpty(entradas)}">
+            <i class="bi bi-egg"></i> Entradas
+        </h2>
+        <div class="row g-3 mb-5">
+            <div th:each="plato : ${entradas}" class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${plato.nombre}">Plato</h5>
+                        <p class="card-text text-muted" th:text="${plato.descripcion}">Descripción</p>
+                        <p class="card-text">
+                            <strong style="color: var(--primary-color); font-size: 1.3rem;">
+                                S/. <span th:text="${#numbers.formatDecimal(plato.precio, 1, 2)}">0.00</span>
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fondos -->
+        <h2 class="mt-5 mb-4" th:if="${!#lists.isEmpty(fondos)}">
+            <i class="bi bi-fire"></i> Platos Principales
+        </h2>
+        <div class="row g-3 mb-5">
+            <div th:each="plato : ${fondos}" class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${plato.nombre}">Plato</h5>
+                        <p class="card-text text-muted" th:text="${plato.descripcion}">Descripción</p>
+                        <p class="card-text">
+                            <strong style="color: var(--primary-color); font-size: 1.3rem;">
+                                S/. <span th:text="${#numbers.formatDecimal(plato.precio, 1, 2)}">0.00</span>
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Postres -->
+        <h2 class="mt-5 mb-4" th:if="${!#lists.isEmpty(postres)}">
+            <i class="bi bi-cake2"></i> Postres
+        </h2>
+        <div class="row g-3 mb-5">
+            <div th:each="plato : ${postres}" class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${plato.nombre}">Plato</h5>
+                        <p class="card-text text-muted" th:text="${plato.descripcion}">Descripción</p>
+                        <p class="card-text">
+                            <strong style="color: var(--primary-color); font-size: 1.3rem;">
+                                S/. <span th:text="${#numbers.formatDecimal(plato.precio, 1, 2)}">0.00</span>
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bebidas -->
+        <h2 class="mt-5 mb-4" th:if="${!#lists.isEmpty(bebidas)}">
+            <i class="bi bi-cup"></i> Bebidas
+        </h2>
+        <div class="row g-3 mb-5">
+            <div th:each="plato : ${bebidas}" class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${plato.nombre}">Plato</h5>
+                        <p class="card-text text-muted" th:text="${plato.descripcion}">Descripción</p>
+                        <p class="card-text">
+                            <strong style="color: var(--primary-color); font-size: 1.3rem;">
+                                S/. <span th:text="${#numbers.formatDecimal(plato.precio, 1, 2)}">0.00</span>
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(entradas) && #lists.isEmpty(fondos) && #lists.isEmpty(postres) && #lists.isEmpty(bebidas)}" class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No hay platos disponibles en este momento
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

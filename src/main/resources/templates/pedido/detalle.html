@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1><i class="bi bi-receipt"></i> Detalle del Pedido #<span th:text="${pedido.idPedido}">1</span></h1>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="/pedidos" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+        </div>
+
+        <div class="row" th:object="${pedido}">
+            <div class="col-md-8">
+                <!-- Información del Pedido -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Información</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Cliente:</strong>
+                                <p th:text="*{cliente != null ? cliente.nombreCompleto : 'Sin cliente'}">Cliente</p>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Mesa:</strong>
+                                <p>#<span th:text="*{mesa.numero}">1</span></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Fecha/Hora:</strong>
+                                <p th:text="*{#temporals.format(fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha</p>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Estado:</strong>
+                                <p>
+                                    <span th:if="*{estado.name() == 'PENDIENTE'}" class="badge bg-warning">Pendiente</span>
+                                    <span th:if="*{estado.name() == 'EN_PREPARACION'}" class="badge bg-info">En Preparación</span>
+                                    <span th:if="*{estado.name() == 'SERVIDO'}" class="badge bg-primary">Servido</span>
+                                    <span th:if="*{estado.name() == 'CERRADO'}" class="badge bg-success">Cerrado</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detalles del Pedido -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Items del Pedido</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Plato</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="detalle : *{detalles}">
+                                    <td th:text="${detalle.plato.nombre}">Plato</td>
+                                    <td th:text="${detalle.cantidad}">1</td>
+                                    <td th:text="${'S/. ' + #numbers.formatDecimal(detalle.precioUnitario, 1, 2)}">0.00</td>
+                                    <td><strong th:text="${'S/. ' + #numbers.formatDecimal(detalle.subtotal, 1, 2)}">0.00</strong></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(detalles)}">
+                                    <td colspan="4" class="text-center text-muted">No hay items</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="mb-4">
+                    <a th:if="*{estaPendiente()}" th:href="@{/pedidos/{id}/en-preparacion(id=*{idPedido})}" 
+                       class="btn btn-info">
+                        <i class="bi bi-hourglass-split"></i> Enviar a Cocina
+                    </a>
+                    <a th:if="*{estaEnPreparacion()}" th:href="@{/pedidos/{id}/servido(id=*{idPedido})}" 
+                       class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Marcar como Servido
+                    </a>
+                    <a th:if="${pedido.estado.name() != 'CERRADO'}" th:href="@{/pedidos/{id}/cerrar(id=*{idPedido})}" 
+                       class="btn btn-success">
+                        <i class="bi bi-lock"></i> Cerrar Pedido
+                    </a>
+                </div>
+            </div>
+
+            <!-- Panel Lateral -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>Total</h5>
+                        <h2 style="color: var(--primary-color);">
+                            S/. <span th:text="${#numbers.formatDecimal(*{total}, 1, 2)}">0.00</span>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

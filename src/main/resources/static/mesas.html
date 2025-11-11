@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor Gourmet - Mesas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><i class="bi bi-shop"></i> Sabor Gourmet</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/mesas.html">Mesas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/pedidos.html">Pedidos</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="userName">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container-fluid py-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="display-5"><i class="bi bi-table"></i> Gestión de Mesas</h1>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Total de Mesas</h6>
+                        <h3 id="totalMesas">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Disponibles</h6>
+                        <h3 id="mesasDisponibles">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Ocupadas</h6>
+                        <h3 id="mesasOcupadas">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Tasa de Ocupación</h6>
+                        <h3 id="tasaOcupacion">0%</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <button class="btn btn-primary" onclick="openNewMesaForm()">
+                    <i class="bi bi-plus-circle"></i> Nueva Mesa
+                </button>
+                <button class="btn btn-secondary" onclick="loadMesas()">
+                    <i class="bi bi-arrow-clockwise"></i> Actualizar
+                </button>
+            </div>
+        </div>
+
+        <!-- Mesas Grid -->
+        <div class="row" id="mesasGrid">
+            <!-- Se llenará con JavaScript -->
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;"></div>
+
+    <!-- Mesa Modal -->
+    <div class="modal fade" id="mesaModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mesaModalTitle">Nueva Mesa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="mesaForm" onsubmit="saveMesa(event)">
+                    <div class="modal-body">
+                        <input type="hidden" id="mesaId">
+                        <div class="mb-3">
+                            <label for="numeroMesa" class="form-label">Número de Mesa</label>
+                            <input type="number" class="form-control" id="numeroMesa" required min="1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="capacidadMesa" class="form-label">Capacidad</label>
+                            <input type="number" class="form-control" id="capacidadMesa" required min="1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="estadoMesa" class="form-label">Estado</label>
+                            <select class="form-select" id="estadoMesa" required>
+                                <option value="DISPONIBLE">Disponible</option>
+                                <option value="OCUPADA">Ocupada</option>
+                                <option value="RESERVADA">Reservada</option>
+                                <option value="MANTENIMIENTO">Mantenimiento</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalTitle">Confirmación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmModalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmBtn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5">
+        <p>&copy; 2025 Sabor Gourmet - Todos los derechos reservados</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script>
+        let mesaModal;
+        let confirmModal;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await AuthHelper.initialize();
+            if (!AuthHelper.isAuthenticated()) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            PageHelper.checkPermission(['ADMIN', 'MOZO']);
+            document.getElementById('userName').textContent = AuthHelper.currentUser?.username || 'Usuario';
+
+            mesaModal = new bootstrap.Modal(document.getElementById('mesaModal'));
+            confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+
+            await loadMesas();
+        });
+
+        async function loadMesas() {
+            try {
+                UIUtils.showLoading(document.getElementById('mesasGrid'));
+                
+                const mesas = await ApiService.getMesas();
+                const stats = await ApiService.getMesasEstadisticas();
+
+                // Actualizar stats
+                document.getElementById('totalMesas').textContent = stats.total;
+                document.getElementById('mesasDisponibles').textContent = stats.disponibles;
+                document.getElementById('mesasOcupadas').textContent = stats.ocupadas;
+                document.getElementById('tasaOcupacion').textContent = stats.tasaOcupacion + '%';
+
+                // Renderizar grid
+                const grid = document.getElementById('mesasGrid');
+                grid.innerHTML = '';
+
+                mesas.forEach(mesa => {
+                    const statusBadge = UIUtils.getStatusBadge(mesa.estado, 'mesa');
+                    const card = document.createElement('div');
+                    card.className = 'col-md-6 col-lg-4 mb-4';
+                    card.innerHTML = `
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title">Mesa ${mesa.numero}</h5>
+                                    <span class="badge ${statusBadge}">${mesa.estado}</span>
+                                </div>
+                                <p class="text-muted mb-2">
+                                    <i class="bi bi-people"></i> Capacidad: ${mesa.capacidad}
+                                </p>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-primary" onclick="editMesa(${mesa.idMesa})">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteMesa(${mesa.idMesa})">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </button>
+                                    ${mesa.estado === 'DISPONIBLE' ? `
+                                        <button class="btn btn-sm btn-warning" onclick="ocuparMesa(${mesa.idMesa})">
+                                            <i class="bi bi-check-circle"></i> Ocupar
+                                        </button>
+                                    ` : `
+                                        <button class="btn btn-sm btn-info" onclick="liberarMesa(${mesa.idMesa})">
+                                            <i class="bi bi-x-circle"></i> Liberar
+                                        </button>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        function openNewMesaForm() {
+            document.getElementById('mesaForm').reset();
+            document.getElementById('mesaId').value = '';
+            document.getElementById('mesaModalTitle').textContent = 'Nueva Mesa';
+            mesaModal.show();
+        }
+
+        async function editMesa(id) {
+            try {
+                const mesa = await ApiService.getMesa(id);
+                document.getElementById('mesaId').value = mesa.idMesa;
+                document.getElementById('numeroMesa').value = mesa.numero;
+                document.getElementById('capacidadMesa').value = mesa.capacidad;
+                document.getElementById('estadoMesa').value = mesa.estado;
+                document.getElementById('mesaModalTitle').textContent = 'Editar Mesa';
+                mesaModal.show();
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        async function saveMesa(event) {
+            event.preventDefault();
+            try {
+                UIUtils.disableFormButtons(document.getElementById('mesaForm'));
+
+                const id = document.getElementById('mesaId').value;
+                const mesa = {
+                    numero: parseInt(document.getElementById('numeroMesa').value),
+                    capacidad: parseInt(document.getElementById('capacidadMesa').value),
+                    estado: document.getElementById('estadoMesa').value
+                };
+
+                if (id) {
+                    await ApiService.updateMesa(id, mesa);
+                    UIUtils.showToast('Mesa actualizada correctamente', 'success');
+                } else {
+                    await ApiService.createMesa(mesa);
+                    UIUtils.showToast('Mesa creada correctamente', 'success');
+                }
+
+                mesaModal.hide();
+                await loadMesas();
+            } catch (error) {
+                UIUtils.showError(error);
+            } finally {
+                UIUtils.disableFormButtons(document.getElementById('mesaForm'), false);
+            }
+        }
+
+        function deleteMesa(id) {
+            UIUtils.showConfirmModal(
+                'Eliminar Mesa',
+                '¿Desea eliminar esta mesa?',
+                async () => {
+                    try {
+                        await ApiService.deleteMesa(id);
+                        UIUtils.showToast('Mesa eliminada correctamente', 'success');
+                        await loadMesas();
+                    } catch (error) {
+                        UIUtils.showError(error);
+                    }
+                }
+            );
+        }
+
+        async function ocuparMesa(id) {
+            try {
+                await ApiService.ocuparMesa(id);
+                UIUtils.showToast('Mesa ocupada', 'success');
+                await loadMesas();
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        async function liberarMesa(id) {
+            try {
+                await ApiService.liberarMesa(id);
+                UIUtils.showToast('Mesa liberada', 'success');
+                await loadMesas();
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        async function logout() {
+            await ApiService.logout();
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor Gourmet - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-shop"></i> Sabor Gourmet
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Dashboard</a>
+                    </li>
+                    <li class="nav-item" data-require-role="ADMIN,MOZO">
+                        <a class="nav-link" href="/mesas.html">Mesas</a>
+                    </li>
+                    <li class="nav-item" data-require-role="ADMIN">
+                        <a class="nav-link" href="/platos.html">Platos</a>
+                    </li>
+                    <li class="nav-item" data-require-role="ADMIN,MOZO">
+                        <a class="nav-link" href="/clientes.html">Clientes</a>
+                    </li>
+                    <li class="nav-item" data-require-role="ADMIN,MOZO,COCINERO,CAJERO">
+                        <a class="nav-link" href="/pedidos.html">Pedidos</a>
+                    </li>
+                    <li class="nav-item dropdown" data-require-role="ADMIN,MOZO,COCINERO,CAJERO">
+                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="userName">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/perfil.html">Mi Perfil</a></li>
+                            <li data-require-role="ADMIN">
+                                <a class="dropdown-item" href="/admin.html">Panel Admin</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container-fluid py-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="display-4 mb-4">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </h1>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="row mb-5" id="statsRow">
+            <!-- Se llenará con JavaScript -->
+        </div>
+
+        <!-- Modules Row -->
+        <div class="row">
+            <div class="col-lg-6 col-xl-4">
+                <div class="card module-card" data-require-role="ADMIN,MOZO">
+                    <div class="card-body text-center">
+                        <i class="bi bi-table" style="font-size: 3rem; color: #d4541a;"></i>
+                        <h5 class="card-title mt-3">Mesas</h5>
+                        <p class="card-text">Gestión de mesas y disponibilidad</p>
+                        <a href="/mesas.html" class="btn btn-primary">Acceder</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-4">
+                <div class="card module-card" data-require-role="ADMIN">
+                    <div class="card-body text-center">
+                        <i class="bi bi-cup-straw" style="font-size: 3rem; color: #d4541a;"></i>
+                        <h5 class="card-title mt-3">Platos</h5>
+                        <p class="card-text">Gestión de menú y precios</p>
+                        <a href="/platos.html" class="btn btn-primary">Acceder</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-4">
+                <div class="card module-card" data-require-role="ADMIN,MOZO">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people" style="font-size: 3rem; color: #d4541a;"></i>
+                        <h5 class="card-title mt-3">Clientes</h5>
+                        <p class="card-text">Gestión de clientes y datos</p>
+                        <a href="/clientes.html" class="btn btn-primary">Acceder</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-4">
+                <div class="card module-card" data-require-role="ADMIN,MOZO,COCINERO,CAJERO">
+                    <div class="card-body text-center">
+                        <i class="bi bi-cart-check" style="font-size: 3rem; color: #d4541a;"></i>
+                        <h5 class="card-title mt-3">Pedidos</h5>
+                        <p class="card-text">Gestión y seguimiento de pedidos</p>
+                        <a href="/pedidos.html" class="btn btn-primary">Acceder</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-4">
+                <div class="card module-card" data-require-role="COCINERO">
+                    <div class="card-body text-center">
+                        <i class="bi bi-fire" style="font-size: 3rem; color: #d4541a;"></i>
+                        <h5 class="card-title mt-3">Cocina</h5>
+                        <p class="card-text">Panel de preparación</p>
+                        <a href="/cocina.html" class="btn btn-primary">Acceder</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-4">
+                <div class="card module-card" data-require-role="ADMIN">
+                    <div class="card-body text-center">
+                        <i class="bi bi-graph-up" style="font-size: 3rem; color: #d4541a;"></i>
+                        <h5 class="card-title mt-3">Reportes</h5>
+                        <p class="card-text">Análisis y auditoría</p>
+                        <a href="/admin.html" class="btn btn-primary">Acceder</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;"></div>
+
+    <!-- Confirm Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalTitle">Confirmación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmModalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmBtn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5">
+        <div class="container-fluid">
+            <p>&copy; 2025 Sabor Gourmet - Todos los derechos reservados</p>
+            <p>Sistema de Gestión de Restaurante | <a href="#">Soporte</a> | <a href="#">Términos</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Inicializar autenticación
+                await AuthHelper.initialize();
+                
+                if (!AuthHelper.isAuthenticated()) {
+                    console.log('No autenticado, redirigiendo a login...');
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                console.log('Usuario autenticado:', AuthHelper.currentUser);
+
+                // Actualizar nombre de usuario
+                const userName = AuthHelper.currentUser?.username || 'Usuario';
+                document.getElementById('userName').textContent = userName;
+
+                // Ocultar elementos basados en roles
+                PageHelper.hideElementsForUnauthorized(['ADMIN', 'MOZO', 'COCINERO', 'CAJERO']);
+
+                // Cargar estadísticas
+                try {
+                    const stats = await ApiService.getAdminEstadisticas();
+                    console.log('Estadísticas:', stats);
+                    
+                    if (stats && stats.totalPedidos !== undefined) {
+                        const statsRow = document.getElementById('statsRow');
+                        statsRow.innerHTML = `
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <div class="stat-label">Total de Pedidos</div>
+                                    <div class="stat-number">${stats.totalPedidos || 0}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <div class="stat-label">Pedidos Pendientes</div>
+                                    <div class="stat-number">${stats.pedidosPendientes || 0}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <div class="stat-label">Usuarios Activos</div>
+                                    <div class="stat-number">${stats.totalUsuarios || 0}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    console.warn('No se pudieron cargar las estadísticas:', error);
+                    // No es un error crítico, continuamos
+                }
+            } catch (error) {
+                console.error('Error en inicialización:', error);
+            }
+        });
+
+        async function logout() {
+            try {
+                await ApiService.logout();
+            } catch (error) {
+                console.error('Error en logout:', error);
+            }
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

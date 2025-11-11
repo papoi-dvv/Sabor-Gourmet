@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <main class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="col-md-5">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">
+                        <i class="bi bi-shop" style="color: var(--primary-color); font-size: 2rem;"></i>
+                    </h1>
+                    <h2 class="text-center mb-4">Sabor Gourmet</h2>
+                    
+                    <!-- Mensaje de Error -->
+                    <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-circle"></i> Usuario o contraseña incorrectos
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <!-- Mensaje de Logout -->
+                    <div th:if="${param.logout}" class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="bi bi-info-circle"></i> Ha cerrado sesión correctamente
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <!-- Formulario de Login -->
+                    <form th:action="@{/login}" method="POST" class="needs-validation">
+                        <div class="mb-3">
+                            <label for="nombreUsuario" class="form-label">
+                                <i class="bi bi-person"></i> Usuario
+                            </label>
+                            <input type="text" class="form-control form-control-lg" id="nombreUsuario" 
+                                   name="nombreUsuario" placeholder="Ingrese su usuario" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="contrasena" class="form-label">
+                                <i class="bi bi-lock"></i> Contraseña
+                            </label>
+                            <input type="password" class="form-control form-control-lg" id="contrasena" 
+                                   name="contrasena" placeholder="Ingrese su contraseña" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <!-- Usuarios de Prueba -->
+                    <div class="bg-light p-3 rounded">
+                        <h6 class="mb-2"><i class="bi bi-info-circle"></i> Usuarios de Prueba:</h6>
+                        <small class="d-block"><strong>Admin:</strong> admin / admin123</small>
+                        <small class="d-block"><strong>Mozo:</strong> mozo / mozo123</small>
+                        <small class="d-block"><strong>Cocinero:</strong> cocinero / cocinero123</small>
+                        <small class="d-block"><strong>Cajero:</strong> cajero / cajero123</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

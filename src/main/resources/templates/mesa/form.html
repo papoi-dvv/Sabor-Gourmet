@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h1 th:if="${mesa.idMesa == null}">
+                    <i class="bi bi-table"></i> Nueva Mesa
+                </h1>
+                <h1 th:if="${mesa.idMesa != null}">
+                    <i class="bi bi-table"></i> Editar Mesa #<span th:text="${mesa.numero}">1</span>
+                </h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <form th:action="${mesa.idMesa == null ? '/mesas' : '/mesas/' + mesa.idMesa}" 
+                              th:object="${mesa}" method="POST">
+                            
+                            <div class="mb-3">
+                                <label for="numero" class="form-label">Número de Mesa *</label>
+                                <input type="number" class="form-control" id="numero" th:field="*{numero}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="capacidad" class="form-label">Capacidad (Personas) *</label>
+                                <input type="number" class="form-control" id="capacidad" th:field="*{capacidad}" 
+                                       min="1" max="20" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select class="form-select" id="estado" th:field="*{estado}">
+                                    <option value="DISPONIBLE">Disponible</option>
+                                    <option value="OCUPADA">Ocupada</option>
+                                    <option value="RESERVADA">Reservada</option>
+                                    <option value="MANTENIMIENTO">Mantenimiento</option>
+                                </select>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-end mt-4">
+                                <a href="/mesas" class="btn btn-secondary">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save"></i> Guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

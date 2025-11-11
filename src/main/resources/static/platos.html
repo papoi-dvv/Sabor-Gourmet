@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor Gourmet - Platos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><i class="bi bi-shop"></i> Sabor Gourmet</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/platos.html">Platos</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="userName">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="display-5"><i class="bi bi-cup-straw"></i> Gestión de Platos</h1>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <button class="btn btn-primary" onclick="openNewPlatoForm()">
+                    <i class="bi bi-plus-circle"></i> Nuevo Plato
+                </button>
+                <button class="btn btn-secondary" onclick="loadPlatos()">
+                    <i class="bi bi-arrow-clockwise"></i> Actualizar
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="platosContainer">
+                            <!-- Se llenará con JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="toastContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;"></div>
+
+    <div class="modal fade" id="platoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="platoModalTitle">Nuevo Plato</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="platoForm" onsubmit="savePlato(event)">
+                    <div class="modal-body">
+                        <input type="hidden" id="platoId">
+                        <div class="mb-3">
+                            <label for="nombrePlato" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombrePlato" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tipoPlato" class="form-label">Tipo</label>
+                            <select class="form-select" id="tipoPlato" required>
+                                <option value="ENTRADA">Entrada</option>
+                                <option value="FONDO">Fondo</option>
+                                <option value="POSTRE">Postre</option>
+                                <option value="BEBIDA">Bebida</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="precioPlato" class="form-label">Precio (S/.)</label>
+                            <input type="number" class="form-control" id="precioPlato" required step="0.01" min="0">
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcionPlato" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="descripcionPlato" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="estadoPlato" class="form-label">Estado</label>
+                            <select class="form-select" id="estadoPlato" required>
+                                <option value="ACTIVO">Activo</option>
+                                <option value="INACTIVO">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmModalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmBtn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5">
+        <p>&copy; 2025 Sabor Gourmet - Todos los derechos reservados</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script>
+        let platoModal;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await AuthHelper.initialize();
+            if (!AuthHelper.isAuthenticated() || !AuthHelper.hasRole('ADMIN')) {
+                window.location.href = '/login.html';
+                return;
+            }
+            document.getElementById('userName').textContent = AuthHelper.currentUser?.username;
+            platoModal = new bootstrap.Modal(document.getElementById('platoModal'));
+            await loadPlatos();
+        });
+
+        async function loadPlatos() {
+            try {
+                UIUtils.showLoading(document.getElementById('platosContainer'));
+                const platos = await ApiService.getPlatos();
+
+                const container = document.getElementById('platosContainer');
+                container.innerHTML = '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Nombre</th><th>Tipo</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="platosBody"></tbody></table></div>';
+
+                const tbody = document.getElementById('platosBody');
+                platos.forEach(plato => {
+                    const row = document.createElement('tr');
+                    const statusBadge = UIUtils.getStatusBadge(plato.estado, 'plato');
+                    row.innerHTML = `
+                        <td>${plato.nombre}</td>
+                        <td>${plato.tipo}</td>
+                        <td>${UIUtils.formatCurrency(plato.precio)}</td>
+                        <td><span class="badge ${statusBadge}">${plato.estado}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editPlato(${plato.idPlato})">Editar</button>
+                            <button class="btn btn-sm btn-danger" onclick="deletePlato(${plato.idPlato})">Eliminar</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        function openNewPlatoForm() {
+            document.getElementById('platoForm').reset();
+            document.getElementById('platoId').value = '';
+            document.getElementById('platoModalTitle').textContent = 'Nuevo Plato';
+            platoModal.show();
+        }
+
+        async function editPlato(id) {
+            try {
+                const plato = await ApiService.getPlato(id);
+                document.getElementById('platoId').value = plato.idPlato;
+                document.getElementById('nombrePlato').value = plato.nombre;
+                document.getElementById('tipoPlato').value = plato.tipo;
+                document.getElementById('precioPlato').value = plato.precio;
+                document.getElementById('descripcionPlato').value = plato.descripcion || '';
+                document.getElementById('estadoPlato').value = plato.estado;
+                document.getElementById('platoModalTitle').textContent = 'Editar Plato';
+                platoModal.show();
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        async function savePlato(event) {
+            event.preventDefault();
+            try {
+                const id = document.getElementById('platoId').value;
+                const plato = {
+                    nombre: document.getElementById('nombrePlato').value,
+                    tipo: document.getElementById('tipoPlato').value,
+                    precio: parseFloat(document.getElementById('precioPlato').value),
+                    descripcion: document.getElementById('descripcionPlato').value,
+                    estado: document.getElementById('estadoPlato').value
+                };
+
+                if (id) {
+                    await ApiService.updatePlato(id, plato);
+                    UIUtils.showToast('Plato actualizado', 'success');
+                } else {
+                    await ApiService.createPlato(plato);
+                    UIUtils.showToast('Plato creado', 'success');
+                }
+
+                platoModal.hide();
+                await loadPlatos();
+            } catch (error) {
+                UIUtils.showError(error);
+            }
+        }
+
+        function deletePlato(id) {
+            UIUtils.showConfirmModal('Eliminar Plato', '¿Desea eliminar este plato?', async () => {
+                try {
+                    await ApiService.deletePlato(id);
+                    UIUtils.showToast('Plato eliminado', 'success');
+                    await loadPlatos();
+                } catch (error) {
+                    UIUtils.showError(error);
+                }
+            });
+        }
+
+        async function logout() {
+            await ApiService.logout();
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>

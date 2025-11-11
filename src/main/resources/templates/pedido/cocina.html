@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    
+    <main class="container-fluid my-5">
+        <h1 class="mb-4">
+            <i class="bi bi-fire" style="color: var(--primary-color);"></i> Panel de Cocina
+        </h1>
+
+        <div class="row g-4">
+            <!-- Pedidos Pendientes -->
+            <div class="col-lg-6">
+                <h3 class="mb-3">
+                    <i class="bi bi-clock"></i> Pedidos Pendientes
+                    <span class="badge bg-warning" th:text="${#lists.size(pendientes)}">0</span>
+                </h3>
+                <div th:if="${#lists.isEmpty(pendientes)}" class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No hay pedidos pendientes
+                </div>
+                <div th:each="pedido : ${pendientes}" class="card mb-3 border-warning">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title">
+                                    Pedido #<span th:text="${pedido.idPedido}">1</span>
+                                    <span class="badge bg-warning ms-2">Pendiente</span>
+                                </h5>
+                                <p class="card-text text-muted">
+                                    Mesa #<span th:text="${pedido.mesa.numero}">1</span>
+                                    <br>
+                                    <span th:text="${#temporals.format(pedido.fechaHora, 'HH:mm')}">Hora</span>
+                                </p>
+                                <div class="mt-2">
+                                    <strong>Items:</strong>
+                                    <ul class="mb-0">
+                                        <li th:each="detalle : ${pedido.detalles}">
+                                            <span th:text="${detalle.cantidad}">1</span>x <span th:text="${detalle.plato.nombre}">Plato</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <a th:href="@{/pedidos/{id}/en-preparacion(id=${pedido.idPedido})}" 
+                                   class="btn btn-lg btn-info">
+                                    <i class="bi bi-hourglass-split"></i><br>En Preparación
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pedidos en Preparación -->
+            <div class="col-lg-6">
+                <h3 class="mb-3">
+                    <i class="bi bi-hourglass-split"></i> En Preparación
+                    <span class="badge bg-info" th:text="${#lists.size(enPreparacion)}">0</span>
+                </h3>
+                <div th:if="${#lists.isEmpty(enPreparacion)}" class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No hay pedidos en preparación
+                </div>
+                <div th:each="pedido : ${enPreparacion}" class="card mb-3 border-info">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title">
+                                    Pedido #<span th:text="${pedido.idPedido}">1</span>
+                                    <span class="badge bg-info ms-2">En Preparación</span>
+                                </h5>
+                                <p class="card-text text-muted">
+                                    Mesa #<span th:text="${pedido.mesa.numero}">1</span>
+                                    <br>
+                                    <span th:text="${#temporals.format(pedido.fechaHora, 'HH:mm')}">Hora</span>
+                                </p>
+                                <div class="mt-2">
+                                    <strong>Items:</strong>
+                                    <ul class="mb-0">
+                                        <li th:each="detalle : ${pedido.detalles}">
+                                            <span th:text="${detalle.cantidad}">1</span>x <span th:text="${detalle.plato.nombre}">Plato</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <a th:href="@{/pedidos/{id}/servido(id=${pedido.idPedido})}" 
+                                   class="btn btn-lg btn-success">
+                                    <i class="bi bi-check-circle"></i><br>Servido
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
