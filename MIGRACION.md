@@ -219,10 +219,10 @@ http://localhost:8080
 #     cocinero1 / password
 #     cajero1 / password
 # - Si cargaste `data-inicial.sql`:
-#     admin / Password123
-#     mozo / Password123
-#     cocinero / Password123
-#     cajero / Password123
+#     admin / password
+#     mozo / password
+#     cocinero / password
+#     cajero / password
 ```
 
 ### 9. **Estructura de Carpetas Static**

@@ -12,7 +12,7 @@ DELETE FROM mesa;
 DELETE FROM usuario;
 
 -- =============================================
--- USUARIOS (Contraseñas: todas son "Password123")
+-- USUARIOS (Contraseñas: todas son "password")
 -- Hash BCrypt generado: $2a$10$slYQmyNdGzin7olVXiYm2OPST9/PgBkqquzi.Ss7KIUgO2t0jKMm6
 -- =============================================
 INSERT INTO usuario (nombre_usuario, contrasena, rol, estado, fecha_creacion) VALUES

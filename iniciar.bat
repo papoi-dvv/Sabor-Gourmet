@@ -46,10 +46,10 @@ echo Iniciando aplicación Sabor-Gourmet...
 echo.
 echo La aplicación estará disponible en: http://localhost:8080
 echo Para acceder, use cualquiera de estas credenciales:
-echo   - Usuario: admin, Contraseña: Password123
-echo   - Usuario: mozo, Contraseña: Password123
-echo   - Usuario: cocinero, Contraseña: Password123
-echo   - Usuario: cajero, Contraseña: Password123
+echo   - Usuario: admin, Contraseña: password
+echo   - Usuario: mozo, Contraseña: password
+echo   - Usuario: cocinero, Contraseña: password
+echo   - Usuario: cajero, Contraseña: password
 echo.
 echo Presione Ctrl+C para detener la aplicación
 echo.

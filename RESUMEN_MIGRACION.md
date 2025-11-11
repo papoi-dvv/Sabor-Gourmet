@@ -195,26 +195,26 @@ mvn spring-boot:run
 ### **Acceder**
 ```
 URL: http://localhost:8080
-Login: admin / Password123
+Login: admin / password
 ```
 
 ### **Credenciales de Prueba**
 ```
 Rol: ADMIN
 Usuario: admin
-Contraseña: Password123
+Contraseña: password
 ---
 Rol: MOZO
 Usuario: mozo
-Contraseña: Password123
+Contraseña: password
 ---
 Rol: COCINERO
 Usuario: cocinero
-Contraseña: Password123
+Contraseña: password
 ---
 Rol: CAJERO
 Usuario: cajero
-Contraseña: Password123
+Contraseña: password
 ```
 
 ---

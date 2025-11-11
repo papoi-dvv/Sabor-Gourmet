@@ -52,23 +52,37 @@ public class DataInitializer {
             }
 
             // Consejo si admin existe pero no coincide
-            usuarioRepository.findByNombreUsuario("admin").ifPresent(admin -> {
-                boolean matches123 = false;
-                boolean matchesLower = false;
-                try { matches123 = passwordEncoder.matches("Password123", admin.getContrasena()); } catch (Exception ex) {}
-                try { matchesLower = passwordEncoder.matches("password", admin.getContrasena()); } catch (Exception ex) {}
-                if (!matches123 && !matchesLower) {
-                    logger.warn("Usuario 'admin' existe pero no coincide con 'Password123' ni con 'password'.");
-                    if (resetAdminOnStartup) {
-                        String newHash = passwordEncoder.encode("password");
-                        admin.setContrasena(newHash);
-                        usuarioRepository.save(admin);
-                        logger.warn("Se ha reescrito la contraseña de 'admin' al valor 'password' (solo en modo dev). Cambiala luego en producción.");
-                    } else {
-                        logger.warn("Para restablecerla automáticamente en arranque, establece la propiedad application 'app.dev.reset-admin=true' (solo en entorno de desarrollo).");
+            if (resetAdminOnStartup) {
+                // En modo desarrollo, reescribimos la contraseña de TODOS los usuarios al valor 'password'
+                // Solo hacerlo en dev para evitar sobrescribir credenciales reales en producción.
+                logger.warn("app.dev.reset-admin=true -> reescribiendo contraseñas de todos los usuarios a 'password' (modo dev)");
+                for (Usuario u : usuarios) {
+                    try {
+                        boolean matchesLower = passwordEncoder.matches("password", u.getContrasena());
+                        if (!matchesLower) {
+                            u.setContrasena(passwordEncoder.encode("password"));
+                            usuarioRepository.save(u);
+                            logger.info(" - contraseña reescrita para usuario: {}", u.getNombreUsuario());
+                        }
+                    } catch (Exception ex) {
+                        // Si hay algún formato extraño, reescribimos de todas formas
+                        u.setContrasena(passwordEncoder.encode("password"));
+                        usuarioRepository.save(u);
+                        logger.info(" - contraseña reescrita (por excepción) para usuario: {}", u.getNombreUsuario());
                     }
                 }
-            });
+            } else {
+                usuarioRepository.findByNombreUsuario("admin").ifPresent(admin -> {
+                    boolean matches123 = false;
+                    boolean matchesLower = false;
+                    try { matches123 = passwordEncoder.matches("Password123", admin.getContrasena()); } catch (Exception ex) {}
+                    try { matchesLower = passwordEncoder.matches("password", admin.getContrasena()); } catch (Exception ex) {}
+                    if (!matches123 && !matchesLower) {
+                        logger.warn("Usuario 'admin' existe pero no coincide con 'Password123' ni con 'password'.");
+                        logger.warn("Para restablecerla automáticamente en arranque, establece la propiedad application 'app.dev.reset-admin=true' (solo en entorno de desarrollo).");
+                    }
+                });
+            }
         } catch (Exception ex) {
             logger.error("Error revisando usuarios: ", ex);
         }

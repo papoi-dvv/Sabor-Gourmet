@@ -60,10 +60,10 @@ La aplicación estará disponible en: **http://localhost:8080**
 
 | Usuario | Contraseña | Rol | Permisos |
 |---------|-----------|-----|---------|
-| admin | Password123 | ADMIN | Acceso total |
-| mozo | Password123 | MOZO | Mesas, Clientes, Pedidos |
-| cocinero | Password123 | COCINERO | Panel de Cocina |
-| cajero | Password123 | CAJERO | Facturación, Reportes |
+| admin | password | ADMIN | Acceso total |
+| mozo | password | MOZO | Mesas, Clientes, Pedidos |
+| cocinero | password | COCINERO | Panel de Cocina |
+| cajero | password | CAJERO | Facturación, Reportes |
 
 ## 📂 Estructura del Proyecto
 

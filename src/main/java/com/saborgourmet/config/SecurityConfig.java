@@ -5,6 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -50,6 +56,30 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // Registrar explícitamente el proveedor de autenticación para asegurar
+        // que se use nuestro CustomUserDetailsService + PasswordEncoder
+        http.authenticationProvider(authenticationProvider());
+
+        // Handlers para peticiones AJAX: devolver JSON en lugar de redirect
+        AuthenticationSuccessHandler successHandler = (request, response, authentication) -> {
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("application/json;charset=UTF-8");
+            Map<String, Object> body = new HashMap<>();
+            body.put("authenticated", true);
+            body.put("username", authentication.getName());
+            body.put("roles", authentication.getAuthorities().stream().map(a -> a.getAuthority()).toArray());
+            new ObjectMapper().writeValue(response.getWriter(), body);
+        };
+
+        AuthenticationFailureHandler failureHandler = (request, response, exception) -> {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            Map<String, Object> body = new HashMap<>();
+            body.put("authenticated", false);
+            body.put("error", exception.getMessage());
+            new ObjectMapper().writeValue(response.getWriter(), body);
+        };
+
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
@@ -64,14 +94,16 @@ public class SecurityConfig {
                         .requestMatchers("/api/pedidos/**").hasAnyRole("ADMIN", "MOZO", "COCINERO", "CAJERO")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login.html")
-                        .usernameParameter("nombreUsuario")
-                        .passwordParameter("contrasena")
-                        .loginProcessingUrl("/api/auth/login")
-                        .defaultSuccessUrl("/index.html", true)
-                        .permitAll()
-                )
+        .formLogin(form -> form
+            .loginPage("/login.html")
+            .usernameParameter("nombreUsuario")
+            .passwordParameter("contrasena")
+            .loginProcessingUrl("/api/auth/login")
+            // Usar handlers que devuelvan JSON para peticiones AJAX
+            .successHandler(successHandler)
+            .failureHandler(failureHandler)
+            .permitAll()
+        )
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
                         .logoutSuccessUrl("/login.html")

@@ -87,7 +87,7 @@ Para entender la migración y usar la aplicación:
    http://localhost:8080
 
 4. Login
-   admin / Password123
+  admin / password
 
 ═══════════════════════════════════════════════════════════════════
 

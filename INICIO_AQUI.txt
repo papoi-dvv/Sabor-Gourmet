@@ -178,7 +178,7 @@ CARACTERÍSTICAS
 4. LOGIN
    ┌─────────────────────────────────────────────────────┐
    │ Usuario: admin                                      │
-   │ Contraseña: Password123                             │
+  │ Contraseña: password                                │
    └─────────────────────────────────────────────────────┘
 
 
@@ -189,10 +189,10 @@ CARACTERÍSTICAS
 ┌──────────┬──────────┬──────────────┬─────────────────────────┐
 │   ROL    │ USUARIO  │ CONTRASEÑA   │      PERMISOS           │
 ├──────────┼──────────┼──────────────┼─────────────────────────┤
-│ ADMIN    │ admin    │ Password123  │ Acceso total            │
-│ MOZO     │ mozo     │ Password123  │ Mesas, Pedidos, Clientes│
-│ COCINERO │ cocinero │ Password123  │ Panel de cocina, pedidos│
-│ CAJERO   │ cajero   │ Password123  │ Pedidos, caja           │
+│ ADMIN    │ admin    │ password     │ Acceso total            │
+│ MOZO     │ mozo     │ password     │ Mesas, Pedidos, Clientes│
+│ COCINERO │ cocinero │ password     │ Panel de cocina, pedidos│
+│ CAJERO   │ cajero   │ password     │ Pedidos, caja           │
 └──────────┴──────────┴──────────────┴─────────────────────────┘
 
 

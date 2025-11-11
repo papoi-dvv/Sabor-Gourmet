@@ -24,10 +24,10 @@ http://localhost:8080
 
 | Usuario | Contraseña | Rol |
 |---------|-----------|-----|
-| admin | Password123 | ADMIN |
-| mozo | Password123 | MOZO |
-| cocinero | Password123 | COCINERO |
-| cajero | Password123 | CAJERO |
+| admin | password | ADMIN |
+| mozo | password | MOZO |
+| cocinero | password | COCINERO |
+| cajero | password | CAJERO |
 
 ---
 
