@@ -1,87 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="fragments/header :: head"></head>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sabor Gourmet - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
 <body>
-    <nav th:replace="fragments/navbar :: navbar"></nav>
-    
-    <main class="container my-5">
+    <div class="container mt-5">
         <div class="row mb-5">
             <div class="col-md-12">
-                <div class="jumbotron bg-light p-5 rounded">
+                <div class="bg-light p-5 rounded">
                     <h1 class="display-4">
-                        <i class="bi bi-shop" style="color: var(--primary-color);"></i> 
-                        Bienvenido a Sabor Gourmet
+                        <i class="bi bi-shop"></i> Bienvenido a Sabor Gourmet
                     </h1>
                     <p class="lead">Sistema de gestión integral para restaurantes</p>
                     <hr class="my-4">
-                    <p>Accede a los módulos disponibles según tu rol</p>
+                    <p>Accede a los módulos disponibles</p>
                 </div>
             </div>
         </div>
 
-        <!-- Módulos Principales -->
         <div class="row g-4">
-            <!-- Mesas -->
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 text-center">
                     <div class="card-body">
-                        <i class="bi bi-table" style="font-size: 3rem; color: var(--primary-color);"></i>
-                        <h5 class="card-title mt-3">Gestión de Mesas</h5>
-                        <p class="card-text text-muted">Controla la disponibilidad y estado de las mesas</p>
-                        <a href="/mesas/dashboard" class="btn btn-primary btn-sm">
-                            <i class="bi bi-arrow-right"></i> Ir a Mesas
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pedidos -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <i class="bi bi-receipt" style="font-size: 3rem; color: var(--primary-color);"></i>
-                        <h5 class="card-title mt-3">Gestión de Pedidos</h5>
-                        <p class="card-text text-muted">Crea y gestiona los pedidos de los clientes</p>
-                        <a href="/pedidos" class="btn btn-primary btn-sm">
-                            <i class="bi bi-arrow-right"></i> Ir a Pedidos
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Menú -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <i class="bi bi-cup-hot" style="font-size: 3rem; color: var(--primary-color);"></i>
-                        <h5 class="card-title mt-3">Menú</h5>
-                        <p class="card-text text-muted">Consulta los platos disponibles</p>
-                        <a href="/platos/menu" class="btn btn-primary btn-sm">
-                            <i class="bi bi-arrow-right"></i> Ver Menú
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Clientes -->
-            <div class="col-md-6 col-lg-4" sec:authorize="hasAnyRole('ADMIN','MOZO')">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <i class="bi bi-people-fill" style="font-size: 3rem; color: var(--primary-color);"></i>
-                        <h5 class="card-title mt-3">Clientes</h5>
-                        <p class="card-text text-muted">Gestiona la información de clientes</p>
-                        <a href="/clientes" class="btn btn-primary btn-sm">
-                            <i class="bi bi-arrow-right"></i> Ir a Clientes
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Admin -->
-            <div class="col-md-6 col-lg-4" sec:authorize="hasRole('ADMIN')">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <i class="bi bi-shield-lock" style="font-size: 3rem; color: var(--primary-color);"></i>
+                        <i class="bi bi-shield-lock" style="font-size: 3rem;"></i>
                         <h5 class="card-title mt-3">Panel Admin</h5>
                         <p class="card-text text-muted">Dashboard administrativo</p>
                         <a href="/admin/dashboard" class="btn btn-primary btn-sm">
@@ -90,9 +34,33 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-fire" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Cocina</h5>
+                        <p class="card-text text-muted">Panel de cocina</p>
+                        <a href="/pedidos/cocina" class="btn btn-primary btn-sm">
+                            <i class="bi bi-arrow-right"></i> Ir a Cocina
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-box-arrow-right" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Cerrar Sesión</h5>
+                        <p class="card-text text-muted">Salir del sistema</p>
+                        <a href="/logout" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
-
-    <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
 </body>
 </html>

@@ -9,23 +9,24 @@ public class HomeController {
     
     @GetMapping("/")
     public String home(Authentication authentication) {
-        // Si está autenticado, redirige al index.html, sino a login.html
         if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
-            return "redirect:/index.html";
+            return "index";
         }
-        return "redirect:/login.html";
+        return "login";
     }
 
     @GetMapping("/index")
-    public String index(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
-            return "redirect:/index.html";
-        }
-        return "redirect:/login.html";
+    public String index() {
+        return "index";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "redirect:/login.html";
+        return "login";
+    }
+    
+    @GetMapping("/cocina.html")
+    public String cocinaHtml() {
+        return "redirect:/pedidos/cocina";
     }
 }

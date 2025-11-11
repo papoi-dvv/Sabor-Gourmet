@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "mesa")
@@ -33,6 +34,7 @@ public class Mesa {
     private LocalDateTime fechaActualizacion = LocalDateTime.now();
 
     @OneToMany(mappedBy = "mesa", cascade = CascadeType.ALL)
+    @JsonManagedReference("mesa-pedidos")
     private List<Pedido> pedidos;
 
     public boolean estaDisponible() {

@@ -84,9 +84,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/index.html", "/login.html", "/index", "/login", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/login.html", "/index", "/login").permitAll()
+                        .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/mesas/**").hasAnyRole("ADMIN", "MOZO")
                         .requestMatchers("/api/platos/**").hasAnyRole("ADMIN")

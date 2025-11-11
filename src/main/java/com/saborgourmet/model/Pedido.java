@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "pedido")
@@ -23,10 +25,12 @@ public class Pedido {
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")
+    @JsonBackReference("cliente-pedidos")
     private Cliente cliente;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_mesa", nullable = false)
+    @JsonBackReference("mesa-pedidos")
     private Mesa mesa;
 
     @Column(nullable = false, updatable = false)
@@ -40,6 +44,7 @@ public class Pedido {
     private BigDecimal total = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("pedido-detalles")
     private List<DetallePedido> detalles = new ArrayList<>();
 
     public void agregarDetalle(DetallePedido detalle) {

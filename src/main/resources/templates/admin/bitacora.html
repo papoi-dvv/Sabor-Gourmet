@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head"></head>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bitácora - Sabor Gourmet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
 <body>
-    <nav th:replace="fragments/navbar :: navbar"></nav>
-    
-    <main class="container my-5">
+    <div class="container mt-5">
         <div class="row mb-4">
             <div class="col-md-12">
                 <h1><i class="bi bi-clipboard-list"></i> Bitácora de Auditoría</h1>
@@ -13,48 +16,51 @@
         </div>
 
         <div class="card">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0 table-sm">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Fecha/Hora</th>
-                            <th>Usuario</th>
-                            <th>Acción</th>
-                            <th>Tabla</th>
-                            <th>Registro ID</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="registro : ${registros}">
-                            <td>
-                                <small th:text="${#temporals.format(registro.fechaHora, 'dd/MM/yyyy HH:mm:ss')}">Fecha</small>
-                            </td>
-                            <td>
-                                <small th:text="${registro.usuario != null ? registro.usuario.nombreUsuario : 'SISTEMA'}">Usuario</small>
-                            </td>
-                            <td>
-                                <span th:if="${registro.accion == 'CREAR'}" class="badge bg-success">CREAR</span>
-                                <span th:if="${registro.accion == 'ACTUALIZAR'}" class="badge bg-info">ACTUALIZAR</span>
-                                <span th:if="${registro.accion == 'ELIMINAR'}" class="badge bg-danger">ELIMINAR</span>
-                            </td>
-                            <td>
-                                <small th:text="${registro.tablaAfectada}">Tabla</small>
-                            </td>
-                            <td>
-                                <small th:text="${registro.registroId}">ID</small>
-                            </td>
-                            <td>
-                                <small th:text="${registro.descripcion}">Descripción</small>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(registros)}">
-                            <td colspan="6" class="text-center text-muted p-4">
-                                <i class="bi bi-inbox"></i> No hay registros en la bitácora
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(registros)}" class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No hay registros en la bitácora
+                </div>
+                
+                <div th:if="${!#lists.isEmpty(registros)}" class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Fecha/Hora</th>
+                                <th>Usuario</th>
+                                <th>Acción</th>
+                                <th>Tabla</th>
+                                <th>ID</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="registro : ${registros}">
+                                <td>
+                                    <small th:text="${registro.fechaHora}">Fecha</small>
+                                </td>
+                                <td>
+                                    <small th:text="${registro.usuario != null ? registro.usuario.nombreUsuario : 'SISTEMA'}">Usuario</small>
+                                </td>
+                                <td>
+                                    <span th:if="${registro.accion == 'CREAR'}" class="badge bg-success">CREAR</span>
+                                    <span th:if="${registro.accion == 'ACTUALIZAR'}" class="badge bg-info">ACTUALIZAR</span>
+                                    <span th:if="${registro.accion == 'ELIMINAR'}" class="badge bg-danger">ELIMINAR</span>
+                                    <span th:unless="${registro.accion == 'CREAR' or registro.accion == 'ACTUALIZAR' or registro.accion == 'ELIMINAR'}" 
+                                          class="badge bg-secondary" th:text="${registro.accion}">OTRO</span>
+                                </td>
+                                <td>
+                                    <small th:text="${registro.tablaAfectada}">Tabla</small>
+                                </td>
+                                <td>
+                                    <small th:text="${registro.registroId}">ID</small>
+                                </td>
+                                <td>
+                                    <small th:text="${registro.descripcion}">Descripción</small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -62,9 +68,10 @@
             <a href="/admin/dashboard" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Volver al Dashboard
             </a>
+            <a href="/index" class="btn btn-primary">
+                <i class="bi bi-house"></i> Inicio
+            </a>
         </div>
-    </main>
-
-    <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
 </body>
 </html>

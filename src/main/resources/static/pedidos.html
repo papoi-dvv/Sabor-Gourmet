@@ -156,7 +156,7 @@
                         <td>#${pedido.idPedido}</td>
                         <td>Mesa ${pedido.mesa?.numero || 'N/A'}</td>
                         <td>${pedido.cliente?.nombres || 'General'}</td>
-                        <td>${UIUtils.formatDate(pedido.fechaCreacion)}</td>
+                        <td>${UIUtils.formatDate(pedido.fechaHora)}</td>
                         <td><span class="badge ${statusBadge}">${pedido.estado}</span></td>
                         <td>${UIUtils.formatCurrency(pedido.total)}</td>
                         <td>
